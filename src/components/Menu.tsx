@@ -1,30 +1,36 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../auth';
 
-import { supabase } from '../supabaseClient';
+export default function Menu() {
+  let auth = useAuth();
+  let navigate = useNavigate();
 
-export default function Menu({ session, profile }) {
+  if (!auth.session) {
+    auth.getSession();
+  }
+
+  if (!auth.profile && Boolean(auth?.session)) {
+    auth.getProfile(auth.session.user.id, () => {})
+  }
 
   const handleLogout = async (event) => {
     event.preventDefault();
-
-    const { error } = await
-    supabase.auth.signOut()
-    navigate('/');
+    auth.signout(() => navigate("/"));
   }
 
   return (
     <>
       <ul>
-        <li><a href="/sectors">Setores</a></li>
-        <li><a href="/sectors/add">Adicionar Setores</a></li>
-        { profile ?
+        <li><Link to="/sectors">Setores</Link></li>
+        <li><Link to="/sectors/add">Adicionar Setores</Link></li>
+        { auth.session?.user ?
           <li>
-            <a href="/profile">{profile?.first_name} {profile?.last_name} </a> 
-            (<a onClick={handleLogout} href="#">sair</a>)
+            <Link to="/profile">{auth.profile?.first_name} {auth.profile?.last_name} </Link>
+            (<Link onClick={handleLogout} to="/signout">sair</Link>)
           </li>
           : 
-          <li><a href="/signin">Entrar</a> / <a href="/signup">Criar uma conta</a></li>}
+          <li><Link to="/signin">Entrar</Link> / <Link to="/signup">Criar uma conta</Link></li>}
       </ul>
     </>
   )

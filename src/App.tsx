@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { Routes, Route, useLocation } from 'react-router-dom';
 import { supabase } from './supabaseClient';
 
+import { AuthProvider, RequireAuth, useAuth } from './auth';
+
 import BaseLayout from './layouts/BaseLayout';
 import LoginLayout from './layouts/LoginLayout';
 
@@ -15,58 +17,37 @@ import Sectors from './pages/Sectors.tsx'
 import AddSectors from './pages/AddSectors.tsx'
 
 function App() {
-  const [session, setSession] = useState(null)
-  const [profile, setProfile] = useState(null)
-  const [loading, setLoading] = useState(null)
+  let auth = useAuth();
 
   useEffect(() => {
-    if (!session) {
-      supabase.auth.getSession().then(( { data: { session } }) => {
-        setSession(session)
-      })
-
-      supabase.auth.onAuthStateChange((_event, session) => {
-        setSession(session)
-      })
+    if (!auth?.session) {
+      auth?.getSession()
+    } else {
+      console.log("nothing to do here");
     }
   })
 
-  useEffect(() => {
-    if (!profile && Boolean(session)) {
-      async function getProfile() {
-        setLoading(true);
-        const { user } = session;
-        let { data, error } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('auth_user_id', user.id)
-          .single()
-        if (error) {
-          console.warn(error);
-        } else {
-          setProfile(data)
-          console.log(data);
-        }
-      }
-        setLoading(false);
-        getProfile();
-    }
-  }, [session])
-
   return (
     <>
-      <Routes>
-        <Route element={<BaseLayout session={session} profile={profile} />}>
-          <Route path="/" element={<Home/>} />
-          <Route path="/sectors" element={<Sectors />} />
-          <Route path="/sectors/add" element={<AddSectors />} />
-          <Route path="/profile" element={<Profile session={session} profile={profile} />} />
-        </Route>
-        <Route element={<LoginLayout />}>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route element={<BaseLayout />}>
+            <Route path="/" element={<Home/>} />
+            <Route path="/sectors" element={<Sectors />} />
+            <Route path="/sectors/add" element={
+              <RequireAuth>
+                <AddSectors />
+              </RequireAuth>
+              }
+            />
+            <Route path="/profile" element={<Profile />} />
+          </Route>
+          <Route element={<LoginLayout />}>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </>
   )
 };
