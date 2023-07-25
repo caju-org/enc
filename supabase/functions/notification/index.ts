@@ -5,7 +5,6 @@
 import { serve } from 'https://deno.land/std@0.168.0/http/server.ts'
 
 // const RESEND_API_KEY = Deno.env.get('RESEND_API_KEY')
-const RESEND_API_KEY = "re_fjXYdnwK_883aTKw5TBz1R2zc9KiUuj21";
 
 const handler = async (_request: Request): Promise<Response> => {
   const req = await _request.json();
