@@ -24,6 +24,8 @@ export default function Menu() {
       <ul>
         <li><Link to="/sectors">Setores</Link></li>
         <li><Link to="/sectors/add">Adicionar Setores</Link></li>
+        <li><Link to="/conquerors">Conquistadores</Link></li>
+        <li><Link to="/conquerors/add">Adicionar Conquistadores</Link></li>
         { auth.session?.user ?
           <li>
             <Link to="/profile">{auth.profile?.first_name} {auth.profile?.last_name} </Link>
