@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
 const AddConquerorsPage = () => {
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState([]);
+  // const [error, setError] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -19,9 +19,10 @@ const AddConquerorsPage = () => {
       last_name: formData.get('last_name'),
     }])
     if (error) {
-      setError(error.toString());
+      // setError(error.toString());
       console.warn(error);
     } else {
+      console.log(data);
       setLoading(false);
       navigate('/conquerors');
     }
@@ -32,6 +33,7 @@ const AddConquerorsPage = () => {
   return (
     <>
       <h1>Adicionar Conquistador</h1>
+      { loading ?? <span>loading...</span> }
       <form onSubmit={handleSubmit}>
         <label>Primeiro nome do conquistador</label>
         <input id="first_name" name="first_name" type="text" /><br />
@@ -40,7 +42,7 @@ const AddConquerorsPage = () => {
 
         <input type="submit" value="submit"></input>
       </form>
-      {error.message}
+      {/* {error.message} */}
 
     </>
   )

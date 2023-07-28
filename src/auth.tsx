@@ -1,37 +1,37 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { supabase } from './supabaseClient';
+import { useAuth } from './hooks';
+
+type Credential = {email: FormDataEntryValue, password: FormDataEntryValue}
 
 interface AuthContextType {
   session: any;
   profile: any;
-  getSession: ( callback: VoidFunction ) => void;
-  getProfile: ( auth_user_id: string, callback: VoidFunction ) => void;
-  sigin: ( credential: {}, callback: VoidFunction ) => void;
-  signout: ( callback: VoidFunction ) => void;
+  getSession: ( callback?: VoidFunction ) => void;
+  getProfile: ( auth_user_id: string, callback?: VoidFunction ) => void;
+  signin: ( credential: Credential, callback?: VoidFunction ) => void;
+  signout: ( callback?: VoidFunction ) => void;
 }
 
-const AuthContext = React.createContext<AuthContextType>(null!);
-
-function useAuth() {
-  return React.useContext(AuthContext);
-}
+const AuthContext = React.createContext<AuthContextType>(null as unknown as AuthContextType);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
-  let [session, setSession] = React.useState<any>(null);
-  let [profile, setProfile] = React.useState<any>(null);
+  const [session, setSession] = useState<any>(null);
+  const [profile, setProfile] = useState<any>(null);
 
-  let getSession = async (callback: VoidFunction) => {
+  const getSession = async (callback?: VoidFunction) => {
     const { data, error } = await supabase.auth.getSession();
     if (error) {
       console.warn(error);
     } else {
-      let session = data.session;
+      const session = data.session;
       setSession(session);
     }
+    callback?.();
   }
 
-  let getProfile = async (auth_user_id: string, callback: VoidFunction) => {
+  const getProfile = async (auth_user_id: string, callback?: VoidFunction) => {
     const { data, error } = await supabase
       .from('profiles')
       .select('first_name,last_name,is_conqueror')
@@ -42,34 +42,34 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     } else {
       setProfile(data);
     }
-    callback();
+    callback?.();
   }
 
-  let signin = async (credential: {}, callback: VoidFunction) => {
+  const signin = async (credential: Credential, callback?: VoidFunction) => {
     const { data, error } = await supabase.auth.signInWithPassword({
-      email: credential.email,
-      password: credential.password
+      email: credential.email.toString(),
+      password: credential.password.toString()
     })
     if (error) {
       alert(error);
     } else {
-      let session = data.session;
+      const session = data.session;
       setSession(session);
-      callback();
+      callback?.();
     }
   }
 
-  let signout = async (callback: VoidFunction) => {
-    let { error } = await supabase.auth.signOut();
+  const signout = async (callback?: VoidFunction) => {
+    const { error } = await supabase.auth.signOut();
     if (error) {
       console.warn(error);
     }
     setSession(null);
     setProfile(null);
-    callback();
+    callback?.();
   }
 
-  let value = { session, profile, getSession, getProfile, signin, signout }
+  const value = { session, profile, getSession, getProfile, signin, signout }
 
   return (
     <AuthContext.Provider value={value}>
@@ -80,8 +80,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 }
 
 function RequireAuth({ children }: { children: JSX.Element }) {
-  let auth = useAuth();
-  let location = useLocation();
+  const auth = useAuth();
+  const location = useLocation();
 
   if (!auth.session) {
     auth.getSession();
@@ -94,4 +94,4 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   return children;
 }
 
-export { AuthProvider, RequireAuth, useAuth };
+export { AuthProvider, RequireAuth, AuthContext };

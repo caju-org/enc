@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
 export default function SignUp() {
   const [loading, setLoading] = useState(false);
-  const [session, setSession] = useState('');
-  const [error, setError] = useState([]);
+  // const [session, setSession] = useState('');
+  // const [error, setError] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -15,27 +15,27 @@ export default function SignUp() {
     const formData = new FormData(event.currentTarget);
     const { data, error } = await 
     supabase.auth.signUp({
-      email: formData.get('email'),
-      password: formData.get('password')
+      email: formData.get('email')?.toString() || "",
+      password: formData.get('password')?.toString() || ""
     })
     if (error) {
-      setError(error.toString());
+      // setError(error.toString());
       console.warn(error);
     } else {
-      setSession(data.session);
-      const { UserData, UserError } = await supabase
+      // setSession(data.session);
+      await supabase
         .from('profiles')
         .insert([
           { 
-            auth_user_id: data.session.user.id,
+            auth_user_id: data?.session?.user.id,
             first_name: formData.get('first_name'),
             last_name: formData.get('last_name'),
             is_conqueror: formData.get('is_conqueror')
           }
         ]);
-     if (Boolean(formData.get('is_conqueror'))) {
+     if (formData.get('is_conqueror')) {
        console.log("the user is also a conqueror, saving");
-       const { ConquerorData, ConquerorError } = await supabase
+       await supabase
         .from('conquerors')
         .insert([
           {
@@ -54,6 +54,7 @@ export default function SignUp() {
   return (
     <>
       <h1>Sign Up</h1>
+      { loading ?? <span>loading...</span> }
       <form onSubmit={handleSubmit}>
         <label>First name</label>
         <input id="first_name" name="first_name" type="text" /><br />
@@ -67,7 +68,7 @@ export default function SignUp() {
         <input id="password" name="password" type="password" /><br />
         <input type="submit" value="submit"></input>
       </form>
-      {error}
+      {/* {error} */}
     </>
   );
 }

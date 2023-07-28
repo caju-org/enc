@@ -1,13 +1,12 @@
-import { useState, useEffect } from 'react'
-import { Routes, Route, useLocation } from 'react-router-dom';
-import { supabase } from './supabaseClient';
+import { useEffect } from 'react'
+import { Routes, Route } from 'react-router-dom';
 
-import { AuthProvider, RequireAuth, useAuth } from './auth';
+import { AuthProvider, RequireAuth } from './auth';
 
-import BaseLayout from './layouts/BaseLayout';
-import LoginLayout from './layouts/LoginLayout';
+import { BaseLayout } from './layouts/BaseLayout';
+import { LoginLayout } from './layouts/LoginLayout';
 
-// import PrivateRoute from './components/PrivateRoute.tsx'
+import { useAuth } from './hooks.ts';
 
 import Home from './pages/Home.tsx'
 import SignIn from './pages/SignIn.tsx'
@@ -19,7 +18,7 @@ import Conquerors from './pages/Conquerors.tsx'
 import AddConquerors from './pages/AddConquerors.tsx'
 
 function App() {
-  let auth = useAuth();
+  const auth = useAuth();
 
   useEffect(() => {
     if (!auth?.session) {
@@ -59,6 +58,6 @@ function App() {
       </AuthProvider>
     </>
   )
-};
+}
 
 export default App

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 
 const AddSectorsPage = () => {
   const [loading, setLoading] = useState(false);
-  const [session, setSession] = useState('');
-  const [error, setError] = useState([]);
+  // const [session, setSession] = useState('');
+  // const [error, setError] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
@@ -23,9 +23,10 @@ const AddSectorsPage = () => {
       how_to_get_there: formData.get('how_to_get_there')
     }])
     if (error) {
-      setError(error.toString());
+      // setError(error.toString());
       console.warn(error);
     } else {
+      console.log(data);
       setLoading(false);
       navigate('/sectors');
     }
@@ -36,6 +37,7 @@ const AddSectorsPage = () => {
   return (
     <>
       <h1>Adicionar Setores</h1>
+      { loading ?? <span>loading...</span> }
       <form onSubmit={handleSubmit}>
         <label>Nome do Setor</label>
         <input id="name" name="name" type="text" /><br />
@@ -50,7 +52,7 @@ const AddSectorsPage = () => {
 
         <input type="submit" value="submit"></input>
       </form>
-      {error.message}
+      {/* {error.message} */}
 
     </>
   )

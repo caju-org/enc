@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { useAuth } from '../auth';
+import { useAuth } from '../hooks';
 
 export default function Menu() {
-  let auth = useAuth();
-  let navigate = useNavigate();
+  const auth = useAuth();
+  const navigate = useNavigate();
 
   if (!auth.session) {
     auth.getSession();
   }
 
   if (!auth.profile && Boolean(auth?.session)) {
-    auth.getProfile(auth.session.user.id, () => {})
+    auth.getProfile(auth.session.user.id);
   }
 
-  const handleLogout = async (event) => {
+  const handleLogout = async (event: React.MouseEvent) => {
     event.preventDefault();
     auth.signout(() => navigate("/"));
   }

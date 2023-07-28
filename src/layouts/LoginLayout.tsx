@@ -1,13 +1,11 @@
-import React, { useState } from 'react'
+import { FC } from 'react'
 import { Outlet } from 'react-router-dom';
 
-const LoginLayout = ({ children }) => {
+export const LoginLayout:FC = () => {
+
   return (
     <>
-      {children}
       <Outlet />
     </>
-  );
-};
-
-export default LoginLayout;
+  )
+}
