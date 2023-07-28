@@ -34,7 +34,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   let getProfile = async (auth_user_id: string, callback: VoidFunction) => {
     const { data, error } = await supabase
       .from('profiles')
-      .select('first_name,last_name')
+      .select('first_name,last_name,is_conqueror')
       .eq('auth_user_id', auth_user_id.toString())
       .single();
     if (error) {

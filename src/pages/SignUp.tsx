@@ -24,18 +24,31 @@ export default function SignUp() {
     } else {
       setSession(data.session);
       const { UserData, UserError } = await supabase
-        .from('users')
+        .from('profiles')
         .insert([
           { 
             auth_user_id: data.session.user.id,
             first_name: formData.get('first_name'),
-            last_name: formData.get('last_name')
+            last_name: formData.get('last_name'),
+            is_conqueror: formData.get('is_conqueror')
           }
         ]);
-      setLoading(false);
-      navigate('/profile');
+     if (Boolean(formData.get('is_conqueror'))) {
+       console.log("the user is also a conqueror, saving");
+       const { ConquerorData, ConquerorError } = await supabase
+        .from('conquerors')
+        .insert([
+          {
+            first_name: formData.get('first_name'),
+            last_name: formData.get('last_name'),
+          }
+        ]);
+     } else {
+      console.log("nothing to do here");
+     }
+     setLoading(false);
+     navigate('/');
     }
-
   };
 
   return (
@@ -48,6 +61,8 @@ export default function SignUp() {
         <input id="last_name" name="last_name" type="text" /><br />
         <label>E-mail</label>
         <input id="email" name="email" type="email" /><br />
+        <label>Did you already conqueror a route?</label>
+        <input id="is_conqueror" name="is_conqueror" type="checkbox" /><br />
         <label>Password</label>
         <input id="password" name="password" type="password" /><br />
         <input type="submit" value="submit"></input>

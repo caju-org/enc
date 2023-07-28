@@ -15,6 +15,8 @@ import SignUp from './pages/SignUp.tsx'
 import Profile from './pages/Profile.tsx'
 import Sectors from './pages/Sectors.tsx'
 import AddSectors from './pages/AddSectors.tsx'
+import Conquerors from './pages/Conquerors.tsx'
+import AddConquerors from './pages/AddConquerors.tsx'
 
 function App() {
   let auth = useAuth();
@@ -33,6 +35,13 @@ function App() {
         <Routes>
           <Route element={<BaseLayout />}>
             <Route path="/" element={<Home/>} />
+            <Route path="/conquerors" element={<Conquerors />} />
+            <Route path="/conquerors/add" element={
+              <RequireAuth>
+                <AddConquerors />
+              </RequireAuth>
+              }
+            />
             <Route path="/sectors" element={<Sectors />} />
             <Route path="/sectors/add" element={
               <RequireAuth>
