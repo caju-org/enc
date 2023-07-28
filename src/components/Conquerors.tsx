@@ -1,17 +1,17 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
 
+type Conquerors = any[];
+
 const Conquerors = () => {
-  const [conquerors, setConquerors] = useState({});
+  const [conquerors, setConquerors] = useState<Conquerors>();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await supabase
+      const conquerorsResponse = await supabase
         .from('conquerors')
         .select('*');
-
-      setConquerors(data);
-      return data
+      setConquerors(conquerorsResponse.data || []);
     }
 
     fetchData()
@@ -20,7 +20,7 @@ const Conquerors = () => {
   return (
     <>
       <ul>
-        {(conquerors?.data || []).map((conqueror) => (
+        {(conquerors || []).map((conqueror) => (
           <li key={conqueror.id}>
             {conqueror.first_name} {conqueror.last_name}
           </li>

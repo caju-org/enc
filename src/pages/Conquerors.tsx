@@ -1,5 +1,3 @@
-import React, { useState, useEffect } from 'react';
-
 import Conquerors from '../components/Conquerors';
 
 const ConquerorsPage = () => {

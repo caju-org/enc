@@ -1,24 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { supabase } from '../supabaseClient';
-import { useAuth } from '../auth';
+import { useAuth } from '../hooks';
 
 export default function SignIn() {
   const navigate = useNavigate();
   const location = useLocation();
 
-  let auth = useAuth();
-  let from = location.state?.from?.pathname || "/";
+  const auth = useAuth();
+  const from = location.state?.from?.pathname || "/";
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const formData = new FormData(event.currentTarget);
 
-    const email = formData.get("email");
-    const password = formData.get("password");
+    const email = formData.get("email") || "";
+    const password = formData.get("password") || "";
     const credential = {
-      "email": email,
-      "password": password
+      email, password
     };
 
     auth.signin(credential, () => {
