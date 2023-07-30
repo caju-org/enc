@@ -16,6 +16,8 @@ import Sectors from './pages/Sectors.tsx'
 import AddSectors from './pages/AddSectors.tsx'
 import Conquerors from './pages/Conquerors.tsx'
 import AddConquerors from './pages/AddConquerors.tsx'
+import ClimbRoutesPage from './pages/climbroutes/Routes.tsx'
+import AddClimbRoutesPage from './pages/climbroutes/AddRoutes.tsx';
 
 function App() {
   const auth = useAuth();
@@ -34,6 +36,13 @@ function App() {
         <Routes>
           <Route element={<BaseLayout />}>
             <Route path="/" element={<Home/>} />
+            <Route path="/routes" element={<ClimbRoutesPage />} />
+            <Route path="/routes/add" element={
+              <RequireAuth>
+                <AddClimbRoutesPage />
+              </RequireAuth>
+              }
+            />
             <Route path="/conquerors" element={<Conquerors />} />
             <Route path="/conquerors/add" element={
               <RequireAuth>

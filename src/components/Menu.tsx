@@ -22,6 +22,8 @@ export default function Menu() {
   return (
     <>
       <ul>
+        <li><Link to="/routes">Vias</Link></li>
+        <li><Link to="/routes/add">Adicionar Vias</Link></li>
         <li><Link to="/sectors">Setores</Link></li>
         <li><Link to="/sectors/add">Adicionar Setores</Link></li>
         <li><Link to="/conquerors">Conquistadores</Link></li>
