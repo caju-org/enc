@@ -3,8 +3,9 @@ import { Routes, Route } from 'react-router-dom';
 
 import { AuthProvider, RequireAuth } from './auth';
 
-import { BaseLayout } from './layouts/BaseLayout';
+import { BaseLayout } from './layouts/DefaultLayout.tsx';
 import { LoginLayout } from './layouts/LoginLayout';
+import HomeLayout from './layouts/HomeLayout';
 
 import { useAuth } from './hooks.ts';
 
@@ -32,27 +33,29 @@ function App() {
     <>
       <AuthProvider>
         <Routes>
+          <Route element={<HomeLayout />}>
+            <Route path="/" element={<Home />} />
+          </Route>
           <Route element={<BaseLayout />}>
-            <Route path="/" element={<Home/>} />
-            <Route path="/conquerors" element={<Conquerors />} />
-            <Route path="/conquerors/add" element={
+            <Route path="/conquistadores" element={<Conquerors />} />
+            <Route path="/conquistadores/adicionar" element={
               <RequireAuth>
                 <AddConquerors />
               </RequireAuth>
               }
             />
-            <Route path="/sectors" element={<Sectors />} />
-            <Route path="/sectors/add" element={
+            <Route path="/setores" element={<Sectors />} />
+            <Route path="/setores/adicionar" element={
               <RequireAuth>
                 <AddSectors />
               </RequireAuth>
               }
             />
-            <Route path="/profile" element={<Profile />} />
+            <Route path="/perfil" element={<Profile />} />
           </Route>
           <Route element={<LoginLayout />}>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
+            <Route path="/entrar" element={<SignIn />} />
+            <Route path="/cadastrar" element={<SignUp />} />
           </Route>
         </Routes>
       </AuthProvider>
