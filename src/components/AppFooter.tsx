@@ -51,8 +51,8 @@ export default function AppFooter() {
             </Typography>
             <Link href="/vias">Vias</Link>
             <Link href="/setores">Setores</Link>
-            <Link href="/conquistadores">Conquistadores</Link>
-            <Link href="/parceiros-de-escalada">Parceiros de escalada</Link>
+            <Link href="/escaladores">Escaladores</Link>
+            <Link href="/entrar">Entrar</Link>
           </Box>
           <Box sx={{ display: 'flex', flexDirection: 'column' }}>
             <Typography fontWeight="bold" level="body-xs" sx={{ mb: 0.5 }}>

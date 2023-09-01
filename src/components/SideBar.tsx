@@ -1,4 +1,4 @@
-import { Link as RouterLink } from 'react-router-dom';
+import { Link as RouterLink, useNavigate } from 'react-router-dom';
 
 import GlobalStyles from '@mui/joy/GlobalStyles';
 import Avatar from '@mui/joy/Avatar';
@@ -22,12 +22,18 @@ import TerrainOutlinedIcon from '@mui/icons-material/TerrainOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 import { useAuth } from '../hooks';
+import { Button } from '@mui/joy';
 
 export default function Sidebar() {
   const auth = useAuth();
+  const navigate = useNavigate();
 
    if (!auth.session) {
     auth.getSession();
+  }
+
+  const handleLogout = async () => {
+    auth.signout(() => navigate("/"));
   }
 
   return (
@@ -149,6 +155,7 @@ export default function Sidebar() {
         </List>
       </Box>
       <Divider />
+      { auth.session?.user.email ? 
       <Box sx={{ display: 'flex', gap: 1, alignItems: 'center' }}>
         <Link
           underline="none"
@@ -171,10 +178,21 @@ export default function Sidebar() {
         </Link>
          <Typography level="body-xs">{auth.session?.user?.email}</Typography>
         </Box>
-        <IconButton variant="plain" color="danger">
+        <IconButton variant="plain" color="danger" onClick={handleLogout} >
           <LogoutOutlinedIcon />
         </IconButton>
       </Box>
+      : 
+      <Box sx={{ display: 'block', gap: 4, alignItems: 'center'}}>
+        <Button component={RouterLink} to="/entrar" color="neutral" sx={{ width: '100%', mb: 1 }}>
+            Faça o Login
+        </Button>
+
+        <Button component={RouterLink} to="/cadastrar" color="neutral" sx={{ width: '100%' }}>
+            Cadastre-se
+        </Button>
+      </Box>
+      }
     </Sheet>
   );
 }

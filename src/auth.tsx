@@ -31,11 +31,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     callback?.();
   }
 
-  const getProfile = async (auth_user_id: string, callback?: VoidFunction) => {
+  const getProfile = async (user_id: string, callback?: VoidFunction) => {
     const { data, error } = await supabase
       .from('profiles')
-      .select('first_name,last_name,is_conqueror')
-      .eq('auth_user_id', auth_user_id.toString())
+      .select(`name,is_conqueror,is_partner,city_id,
+        states(name,id),
+        cities(name)`)
+      .eq('id', user_id.toString())
       .single();
     if (error) {
       console.warn(error);

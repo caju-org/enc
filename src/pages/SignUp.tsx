@@ -8,16 +8,18 @@ import FormLabel from '@mui/joy/FormLabel';
 import Input from '@mui/joy/Input';
 import Link from '@mui/joy/Link';
 import Typography  from '@mui/joy/Typography';
+import Modal from '@mui/joy/Modal';
+import ModalClose from '@mui/joy/ModalClose';
+import ModalDialog from '@mui/joy/ModalDialog';
 
 export default function SignUp() {
-  const [loading, setLoading] = useState(false);
+  const [modalStatus, setModalStatus] = useState(false);
   // const [session, setSession] = useState('');
   // const [error, setError] = useState([]);
   const navigate = useNavigate();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setLoading(true);
 
     const formData = new FormData(event.currentTarget);
     const { data, error } = await 
@@ -30,6 +32,7 @@ export default function SignUp() {
       console.warn(error);
     } else {
       console.log(data);
+      setModalStatus(true);
       // setSession(data.session);
     //   await supabase
     //     .from('profiles')
@@ -54,14 +57,31 @@ export default function SignUp() {
     //  } else {
     //   console.log("nothing to do here");
     //  }
-     setLoading(false);
-     navigate('/');
     }
   };
 
+  const redirectAfterSignUp = async () => {
+    setModalStatus(false);
+    navigate("/entrar");
+  }
   return (
     <>
-      { loading ?? <span>loading...</span> }
+      <Modal open={modalStatus} onClose={redirectAfterSignUp}>
+        <ModalDialog>
+          <ModalClose />
+          <Typography
+            component="h2"
+            id="modal-title"
+            level="h4"
+            textColor="inherit"
+            fontWeight="lg"
+            mb={1}
+          >
+            Cadastro realizado com sucesso
+          </Typography>
+          <Typography><strong>Agora você</strong> só precisa confirmar o e-mail cadastrado.</Typography>
+        </ModalDialog>
+      </Modal>
       <Typography component="h1" fontSize="xl2" fontWeight="lg">Crie uma conta</Typography>
       <form onSubmit={handleSubmit}>
         <FormControl required>

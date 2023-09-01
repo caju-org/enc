@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 
 import AspectRatio from '@mui/joy/AspectRatio';
 import Box from '@mui/joy/Box';
@@ -14,41 +15,41 @@ import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import TerrainOutlinedIcon from '@mui/icons-material/TerrainOutlined';
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined';
 import TodayOutlinedIcon from '@mui/icons-material/TodayOutlined';
-// import ImageIcon from '@mui/icons-material/Image';
+import ImageIcon from '@mui/icons-material/Image';
 
 type SectorsCardProps = {
-  key: string;
   name: React.ReactNode;
+  slug: string;
   description: React.ReactNode;
   how_to_get_there: React.ReactNode;
   city: string;
   state: string;
+  stars: number;
   updated_at: string;
-  image: string;
+  image?: string;
   liked?: boolean;
-  awesomePlace?: boolean;
 };
 
 export default function SectorsCard({
-  key,
   city,
   state,
   name,
+  slug,
   description,
   how_to_get_there, 
+  stars,
   updated_at,
-  awesomePlace= false,
   liked = false,
   image,
 }: SectorsCardProps) {
   const [isLiked, setIsLiked] = React.useState(liked);
   return (
     <Card
-      key={key}
       variant="outlined"
       orientation="horizontal"
       sx={{
         transition: '250ms all',
+        mb: 2,
         padding: {
           xs: 0,
           sm: 2,
@@ -79,7 +80,7 @@ export default function SectorsCard({
           }}
         >
           <AspectRatio
-            ratio={16 / 9}
+            ratio={4 / 3}
             sx={(theme) => ({
               borderRadius: 'xs',
               [theme.breakpoints.down('sm')]: {
@@ -88,11 +89,12 @@ export default function SectorsCard({
               },
             })}
           >
-            {/* <div>
+            {image ? 
+              <img alt="" src={image} style={{ display: 'block' }} />
+            :
               <ImageIcon sx={{ display: 'block', fontSize: '4rem', opacity: 0.4 }} />
-            </div> */}
-            <img alt="" src={image} style={{ display: 'block' }} />
-            {awesomePlace && (
+            }
+            {stars > 25 && (
               <Chip
                 variant="soft"
                 startDecorator={<EmojiEventsOutlinedIcon />}
@@ -135,9 +137,10 @@ export default function SectorsCard({
             <div>
               <Typography fontWeight="md" fontSize="lg">
                 <Link
+                  component={RouterLink}
                   overlay
                   underline="none"
-                  href="#interactive-card"
+                  to={slug}
                   sx={{ color: 'text.primary' }}
                 >
                   {name}
@@ -164,7 +167,7 @@ export default function SectorsCard({
             </Typography>
           </Stack>
 
-          <Stack spacing={3} direction="row">
+          <Stack spacing={3} direction="row" sx={{ mt: 16 }}>
             <Typography 
               level="body-sm" 
               startDecorator={<PlaceOutlinedIcon />}>

@@ -13,7 +13,8 @@ import Home from './pages/Home.tsx'
 import SignIn from './pages/SignIn.tsx'
 import SignUp from './pages/SignUp.tsx'
 import Profile from './pages/Profile.tsx'
-import Sectors from './pages/Sectors.tsx'
+import Sectors from './pages/sectors/Sectors.tsx'
+import SingleSector from './pages/sectors/SingleSector.tsx'
 import AddSectors from './pages/AddSectors.tsx'
 import Conquerors from './pages/Conquerors.tsx'
 import AddConquerors from './pages/AddConquerors.tsx'
@@ -45,6 +46,7 @@ function App() {
               }
             />
             <Route path="/setores" element={<Sectors />} />
+            <Route path="/setores/:slug" element={<SingleSector />} />
             <Route path="/setores/adicionar" element={
               <RequireAuth>
                 <AddSectors />
