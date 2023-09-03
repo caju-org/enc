@@ -10,42 +10,32 @@ import Typography from "@mui/joy/Typography";
 
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
 
-type Sector = {
+type Climber = {
   id: React.ReactNode;
   name: string;
-  slug: string;
-  description: string;
-  how_to_get_there: string;
-  stars: number;
-  states: { name: string; uf: string }[];
-  cities: { name: string }[];
-  city_id: number;
-  state_id: number;
 };
 
-const SingleSectorPage = () => {
-  const [sector, setSector] = useState<Sector | null>();
+const SingleClimberPage = () => {
+  const [climber, setClimber] = useState<Climber | null>();
   const params = useParams();
 
   useEffect(() => {
     const fetchData = async () => {
-      const sectorResponse = await supabase
-        .from("sectors")
+      const climberResponse = await supabase
+        .from("profiles")
         .select(
           `
-          id,name,slug,description,how_to_get_there,stars,city_id,state_id,created_at,updated_at,
-          states(name,uf),
-          cities(name)
+          id,name
         `
         )
         .eq("slug", params.slug)
         .single();
 
-      setSector(sectorResponse?.data);
+      setClimber(climberResponse?.data);
     };
 
     fetchData();
-  }, []);
+  }, [params.slug]);
 
   return (
     <>
@@ -58,7 +48,7 @@ const SingleSectorPage = () => {
         }}
       >
         <Typography level="h1" fontSize="xl2" sx={{ mb: 1 }}>
-          Setores / {sector?.name}
+          Setores / {climber?.name}
         </Typography>
 
         <Card sx={{ minHeight: "280px", width: 320 }}>
@@ -93,4 +83,4 @@ const SingleSectorPage = () => {
   );
 };
 
-export default SingleSectorPage;
+export default SingleClimberPage;

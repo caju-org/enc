@@ -14,7 +14,7 @@ interface AuthContextType {
   signout: ( callback?: VoidFunction ) => void;
 }
 
-const AuthContext = React.createContext<AuthContextType>(null as unknown as AuthContextType);
+const AuthContext = React.createContext<AuthContextType>({} as unknown as AuthContextType);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<any>(null);
@@ -34,9 +34,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   const getProfile = async (user_id: string, callback?: VoidFunction) => {
     const { data, error } = await supabase
       .from('profiles')
-      .select(`name,is_conqueror,is_partner,city_id,
-        states(name,id),
-        cities(name)`)
+      .select(`name,is_conqueror,is_partner,state_name,city_name`)
       .eq('id', user_id.toString())
       .single();
     if (error) {

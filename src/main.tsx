@@ -7,11 +7,15 @@ import { StyledEngineProvider } from '@mui/joy/styles';
 
 import '@fontsource/public-sans';
 
+import { AuthProvider } from './auth.tsx';
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <BrowserRouter>
       <StyledEngineProvider injectFirst>
-        <App />
+        <AuthProvider>
+          <App />
+        </AuthProvider>
       </StyledEngineProvider>
     </BrowserRouter>
   </React.StrictMode>,
