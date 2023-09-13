@@ -1,20 +1,22 @@
-import React, { useState } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
-import { supabase } from './supabaseClient';
-import { useAuth } from './hooks';
+import React, { useState } from "react";
+import { Navigate, useLocation } from "react-router-dom";
+import { supabase } from "./supabaseClient";
+import { useAuth } from "./hooks";
 
-type Credential = {email: FormDataEntryValue, password: FormDataEntryValue}
+type Credential = { email: FormDataEntryValue; password: FormDataEntryValue };
 
 interface AuthContextType {
   session: any;
   profile: any;
-  getSession: ( callback?: VoidFunction ) => void;
-  getProfile: ( auth_user_id: string, callback?: VoidFunction ) => void;
-  signin: ( credential: Credential, callback?: VoidFunction ) => void;
-  signout: ( callback?: VoidFunction ) => void;
+  getSession: (callback?: VoidFunction) => void;
+  getProfile: (auth_user_id: string, callback?: VoidFunction) => void;
+  signin: (credential: Credential, callback?: VoidFunction) => void;
+  signout: (callback?: VoidFunction) => void;
 }
 
-const AuthContext = React.createContext<AuthContextType>({} as unknown as AuthContextType);
+const AuthContext = React.createContext<AuthContextType>(
+  {} as unknown as AuthContextType
+);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const [session, setSession] = useState<any>(null);
@@ -29,13 +31,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(session);
     }
     callback?.();
-  }
+  };
 
   const getProfile = async (user_id: string, callback?: VoidFunction) => {
     const { data, error } = await supabase
-      .from('profiles')
+      .from("profiles")
       .select(`name,is_conqueror,is_partner,state_name,city_name`)
-      .eq('id', user_id.toString())
+      .eq("id", user_id.toString())
       .single();
     if (error) {
       console.warn(error);
@@ -43,13 +45,13 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       setProfile(data);
     }
     callback?.();
-  }
+  };
 
   const signin = async (credential: Credential, callback?: VoidFunction) => {
     const { data, error } = await supabase.auth.signInWithPassword({
       email: credential.email.toString(),
-      password: credential.password.toString()
-    })
+      password: credential.password.toString(),
+    });
     if (error) {
       alert(error);
     } else {
@@ -57,7 +59,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
       setSession(session);
       callback?.();
     }
-  }
+  };
 
   const signout = async (callback?: VoidFunction) => {
     const { error } = await supabase.auth.signOut();
@@ -67,16 +69,11 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     setSession(null);
     setProfile(null);
     callback?.();
-  }
+  };
 
-  const value = { session, profile, getSession, getProfile, signin, signout }
+  const value = { session, profile, getSession, getProfile, signin, signout };
 
-  return (
-    <AuthContext.Provider value={value}>
-      {children}
-    </AuthContext.Provider>
-  )
-
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
 
 function RequireAuth({ children }: { children: JSX.Element }) {
@@ -88,7 +85,7 @@ function RequireAuth({ children }: { children: JSX.Element }) {
   }
 
   if (!auth.session) {
-    return <Navigate to="/signin" state={{ from: location }} replace />;
+    return <Navigate to="/entrar" state={{ from: location }} replace />;
   }
 
   return children;

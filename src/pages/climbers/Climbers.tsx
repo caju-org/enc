@@ -2,8 +2,11 @@ import React, { useState, useEffect } from "react";
 import { supabase } from "../../supabaseClient";
 
 import Box from "@mui/joy/Box";
+import Button from "@mui/joy/Button";
 import Grid from "@mui/joy/Grid";
+import Stack from "@mui/joy/Stack";
 import Typography from "@mui/joy/Typography";
+
 import ClimbersCard from "../../components/ClimbersCard";
 
 type Climbers = any[];
@@ -31,9 +34,21 @@ const ClimbersPage = () => {
           mx: "auto",
         }}
       >
-        <Typography level="h1" fontSize="xl2" sx={{ mb: 1 }}>
-          Escaladores
-        </Typography>
+        <Stack
+          direction={{
+            xs: "column",
+            sm: "row",
+          }}
+          justifyContent="space-between"
+          alignItems="flex-start"
+          spacing={2}
+          marginBottom={2}
+        >
+          <Typography level="h1" fontSize="xl2" sx={{ mb: 1 }}>
+            Escaladores
+          </Typography>
+          <Button>Adicionar novo(a) escalador(a)</Button>
+        </Stack>
 
         <Grid
           container

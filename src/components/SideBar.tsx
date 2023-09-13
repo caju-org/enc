@@ -130,7 +130,7 @@ export default function Sidebar() {
             </ListItemButton>
           </ListItem>
           <ListItem>
-            <ListItemButton>
+            <ListItemButton component={RouterLink} to="/vias">
               <ListItemDecorator>
                 <TerrainOutlinedIcon />
               </ListItemDecorator>

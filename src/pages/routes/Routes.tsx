@@ -6,27 +6,29 @@ import Box from "@mui/joy/Box";
 import Typography from "@mui/joy/Typography";
 import Stack from "@mui/joy/Stack";
 
-import SectorsCard from "../../components/SectorsCard";
+// import RoutesCard from "../../components/RoutesCard";
 import { Button } from "@mui/joy";
+import ClimbRoutesCard from "../../components/RoutesCard";
 
-type Sectors = any[];
+type Routes = any[];
 
-const SectorsPage = () => {
-  const [sectors, setSectors] = useState<Sectors>();
+const RoutesPage = () => {
+  const [routes, setRoutes] = useState<Routes>();
 
   useEffect(() => {
     const fetchData = async () => {
-      const sectorsResponse = await supabase.from("sectors").select(`
-          id,name,slug,description,how_to_get_there,stars,city_id,state_id,created_at,updated_at,
-          states(uf),
-          cities(name)
+      const routesResponse = await supabase.from("climb_routes").select(`
+          id,name,slug,description,modality,length,created_at,updated_at,
+          sectors(name, city_id, state_id)
         `);
 
-      setSectors(sectorsResponse.data || []);
+      setRoutes(routesResponse.data || []);
     };
 
     fetchData();
   }, []);
+
+  console.log(routes);
 
   return (
     <>
@@ -49,27 +51,26 @@ const SectorsPage = () => {
           marginBottom={2}
         >
           <Typography level="h1" fontSize="xl2" sx={{ mb: 1 }}>
-            Setores
+            Vias
           </Typography>
           <Button component={RouterLink} to="adicionar">
-            Adicionar novo setor
+            Adicionar nova via de escalada
           </Button>
         </Stack>
 
-        {(sectors || []).map((sector) => (
-          <React.Fragment key={sector.id}>
-            <SectorsCard
-              id={sector.id}
-              name={sector.name}
-              slug={sector.slug}
-              description={sector.description}
-              how_to_get_there={sector.how_to_get_there}
-              city={sector.cities.name}
-              state={sector.states.uf}
-              updated_at={new Date(sector.updated_at).toLocaleString()}
-              stars={sector.stars}
+        {(routes || []).map((route) => (
+          <React.Fragment key={route.id}>
+            <ClimbRoutesCard
+              name={route.name}
+              slug={route.slug}
+              sector={route.sectors}
+              description={route.description}
+              modality={route.modality}
+              length={route.length}
+              updated_at={new Date(route.updated_at).toLocaleString()}
+              stars={route.stars}
               image="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=400"
-            ></SectorsCard>
+            ></ClimbRoutesCard>
           </React.Fragment>
         ))}
       </Box>
@@ -77,4 +78,4 @@ const SectorsPage = () => {
   );
 };
 
-export default SectorsPage;
+export default RoutesPage;

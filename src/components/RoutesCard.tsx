@@ -12,40 +12,39 @@ import Typography from "@mui/joy/Typography";
 
 import EmojiEventsOutlinedIcon from "@mui/icons-material/EmojiEventsOutlined";
 import PlaceOutlinedIcon from "@mui/icons-material/PlaceOutlined";
-import TerrainOutlinedIcon from "@mui/icons-material/TerrainOutlined";
+// import TerrainOutlinedIcon from "@mui/icons-material/TerrainOutlined";
+import CategoryOutlinedIcon from "@mui/icons-material/CategoryOutlined";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import TodayOutlinedIcon from "@mui/icons-material/TodayOutlined";
 import ImageIcon from "@mui/icons-material/Image";
 
-import CountClimbRoutes from "./CountClimbRoutes";
+import StraightenOutlinedIcon from "@mui/icons-material/StraightenOutlined";
 
-type SectorsCardProps = {
-  id: React.ReactNode;
+type ClimbRoutesCardProps = {
   name: React.ReactNode;
   slug: string;
+  sector: { name: string; city_id: number };
   description: React.ReactNode;
-  how_to_get_there: React.ReactNode;
-  city: string;
-  state: string;
+  modality: string;
+  length: number;
   stars: number;
   updated_at: string;
   image?: string;
   liked?: boolean;
 };
 
-export default function SectorsCard({
-  id,
-  city,
-  state,
+export default function ClimbRoutesCard({
   name,
   slug,
+  sector,
   description,
-  how_to_get_there,
+  modality,
+  length,
   stars,
   updated_at,
-  liked = false,
   image,
-}: SectorsCardProps) {
+  liked = false,
+}: ClimbRoutesCardProps) {
   const [isLiked, setIsLiked] = React.useState(liked);
   return (
     <Card
@@ -155,29 +154,34 @@ export default function SectorsCard({
               <StarBorderOutlinedIcon />
             </IconButton>
           </Stack>
-          <Stack spacing={1} direction="row">
-            <Typography level="body-md">{description}</Typography>
-          </Stack>
 
           <Stack spacing={1} direction="row">
             <Typography level="body-md">
-              <strong>Como chegar:</strong> {how_to_get_there}
+              {description?.toString().substring(0, 150)}...
             </Typography>
           </Stack>
 
           <Stack spacing={3} direction="row" sx={{ mt: 16 }}>
-            <Typography level="body-sm" startDecorator={<PlaceOutlinedIcon />}>
-              {city}/{state}
-            </Typography>
             <Typography
               level="body-sm"
-              startDecorator={<TerrainOutlinedIcon />}
+              startDecorator={<CategoryOutlinedIcon />}
+            >
+              {modality}
+            </Typography>
+
+            <Typography level="body-sm" startDecorator={<PlaceOutlinedIcon />}>
+              {sector?.name} ({sector?.city_id})
+            </Typography>
+
+            <Typography
+              level="body-sm"
+              startDecorator={<StraightenOutlinedIcon />}
               display={{
                 xs: "none",
                 md: "flex",
               }}
             >
-              <CountClimbRoutes id={id} /> vias
+              {length} metros
             </Typography>
 
             <Typography
