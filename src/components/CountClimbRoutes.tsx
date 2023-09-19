@@ -3,7 +3,7 @@ import { useState, useEffect } from "react";
 import { supabase } from "../supabaseClient";
 
 type CountClimbRoutesProps = {
-  id: React.ReactNode;
+  id?: React.ReactNode;
 };
 
 export default function CountClimbRoutes({ id }: CountClimbRoutesProps) {
@@ -11,12 +11,18 @@ export default function CountClimbRoutes({ id }: CountClimbRoutesProps) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const routesResponse = await supabase
-        .from("climb_routes")
-        .select("id", { count: "exact", head: true })
-        .eq("sector_id", id);
-
-      setRoutesNumber(routesResponse.count || 0);
+      if (id) {
+        const routesResponse = await supabase
+          .from("climb_routes")
+          .select("id", { count: "exact", head: true })
+          .eq("sector_id", id);
+        setRoutesNumber(routesResponse.count || 0);
+      } else {
+        const routesResponse = await supabase
+          .from("climb_routes")
+          .select("id", { count: "exact", head: true });
+        setRoutesNumber(routesResponse.count || 0);
+      }
     };
 
     fetchData();

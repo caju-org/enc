@@ -65,6 +65,7 @@ export default function AddRoute() {
 
       if (sectorsResponse) {
         setAllSectors(sectorsResponse?.data);
+        console.log(sectorsResponse?.data);
       }
       //   setAllSectors(sectorsResponse?.data?.map((sector) => sector.name) || []);
     };

@@ -213,8 +213,8 @@ INSERT INTO cities (name, state_id) VALUES
   ('Várzea Alegre', 6),
   ('Viçosa do Ceará', 6);
 
-INSERT INTO sectors (name, slug, city_id, state_id, description, how_to_get_there) VALUES
-  ('Vale Perdido', 'vale-perdido', 149, 6, 'Setor ótimo com vias de todas as graduações, uma boa área sombreada, algumas vias ficam no sol no período da tarde', 'O setor é de fácil acesso, ele fica do lado de fora da cidade', );
+INSERT INTO sectors (name, slug, city_id, state_id, description, how_to_get_there, state_name, city_name, stars) VALUES
+  ('Vale Perdido', 'vale-perdido', 149, 6, 'Setor ótimo com vias de todas as graduações, uma boa área sombreada, algumas vias ficam no sol no período da tarde', 'O setor é de fácil acesso, ele fica do lado de fora da cidade', 'Ceará', 'Quixadá', 31);
 
-INSERT INTO sectors (name, slug, city_id, state_id, description, how_to_get_there) VALUES
-  ('Magé', 'mage', 149, 6, 'Setor escola da cidade, acesso maravilhoso, sem necessidade de trilha', 'O setor é de fácil acesso, praticamente dentro da cidade, siga pela rua X, até a placa da fazenda.');
+INSERT INTO sectors (name, slug, city_id, state_id, description, how_to_get_there, state_name, city_name, stars) VALUES
+  ('Magé', 'mage', 149, 6, 'Setor escola da cidade, acesso maravilhoso, sem necessidade de trilha', 'O setor é de fácil acesso, praticamente dentro da cidade, siga pela rua X, até a placa da fazenda.', 'Ceará', 'Quixadá', 14);
