@@ -10,7 +10,7 @@ import ListItemButton from "@mui/joy/ListItemButton";
 import Person from "@mui/icons-material/Person";
 
 export default function HomeMenu() {
-  const { session, profile, signout } = useAuth();
+  const { session } = useAuth();
 
   return (
     <Box component="nav" aria-label="escalada no ceará" sx={{}}>
