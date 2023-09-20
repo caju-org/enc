@@ -1,63 +1,85 @@
-import { useEffect } from 'react'
-import { Routes, Route } from 'react-router-dom';
+import { useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
 
-import { AuthProvider, RequireAuth } from './auth';
+import { RequireAuth } from "./auth";
 
-import { BaseLayout } from './layouts/BaseLayout';
-import { LoginLayout } from './layouts/LoginLayout';
+import { BaseLayout } from "./layouts/DefaultLayout.tsx";
+import { LoginLayout } from "./layouts/LoginLayout";
+import HomeLayout from "./layouts/HomeLayout";
 
-import { useAuth } from './hooks.ts';
+import { useAuth } from "./hooks.ts";
 
-import Home from './pages/Home.tsx'
-import SignIn from './pages/SignIn.tsx'
-import SignUp from './pages/SignUp.tsx'
-import Profile from './pages/Profile.tsx'
-import Sectors from './pages/Sectors.tsx'
-import AddSectors from './pages/AddSectors.tsx'
-import Conquerors from './pages/Conquerors.tsx'
-import AddConquerors from './pages/AddConquerors.tsx'
+import Home from "./pages/Home.tsx";
+import SignIn from "./pages/SignIn.tsx";
+import SignUp from "./pages/SignUp.tsx";
+import Profile from "./pages/Profile.tsx";
+import ClimbRoutes from "./pages/routes/Routes.tsx";
+import AddClimbRoutes from "./pages/routes/AddRoute.tsx";
+import Climbers from "./pages/climbers/Climbers.tsx";
+import Sectors from "./pages/sectors/Sectors.tsx";
+import SingleSector from "./pages/sectors/SingleSector.tsx";
+import AddSectors from "./pages/sectors/AddSector.tsx";
+import AddConquerors from "./pages/AddConquerors.tsx";
 
 function App() {
-  const auth = useAuth();
+  const { session, profile, getSession, getProfile } = useAuth();
 
   useEffect(() => {
-    if (!auth?.session) {
-      auth?.getSession()
-    } else {
-      console.log("nothing to do here");
+    if (getSession && !session) {
+      getSession();
     }
-  })
+  }, [getSession, session]);
+
+  useEffect(() => {
+    if (!profile && session) {
+      getProfile(session?.user?.id);
+    }
+  }, [getProfile, profile, session]);
 
   return (
     <>
-      <AuthProvider>
-        <Routes>
-          <Route element={<BaseLayout />}>
-            <Route path="/" element={<Home/>} />
-            <Route path="/conquerors" element={<Conquerors />} />
-            <Route path="/conquerors/add" element={
+      <Routes>
+        <Route element={<HomeLayout />}>
+          <Route path="/" element={<Home />} />
+        </Route>
+        <Route element={<BaseLayout />}>
+          <Route path="/vias" element={<ClimbRoutes />} />
+          <Route
+            path="/vias/adicionar"
+            element={
+              <RequireAuth>
+                <AddClimbRoutes />
+              </RequireAuth>
+            }
+          />
+          <Route path="/escaladores" element={<Climbers />} />
+          <Route
+            path="/conquistadores/adicionar"
+            element={
               <RequireAuth>
                 <AddConquerors />
               </RequireAuth>
-              }
-            />
-            <Route path="/sectors" element={<Sectors />} />
-            <Route path="/sectors/add" element={
+            }
+          />
+          <Route path="/setores" element={<Sectors />} />
+          <Route path="/setores/:slug" element={<SingleSector />} />
+          <Route
+            path="/setores/adicionar"
+            element={
               <RequireAuth>
                 <AddSectors />
               </RequireAuth>
-              }
-            />
-            <Route path="/profile" element={<Profile />} />
-          </Route>
-          <Route element={<LoginLayout />}>
-            <Route path="/signin" element={<SignIn />} />
-            <Route path="/signup" element={<SignUp />} />
-          </Route>
-        </Routes>
-      </AuthProvider>
+            }
+          />
+          <Route path="/perfil" element={<Profile />} />
+        </Route>
+        <Route element={<LoginLayout />}>
+          <Route path="/entrar" element={<SignIn />} />
+          <Route path="/cadastrar" element={<SignUp />} />
+        </Route>
+      </Routes>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
