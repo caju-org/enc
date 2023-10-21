@@ -92,14 +92,16 @@ export default function AddRoute() {
 
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name");
-    // const description = formData.get("description");
+    const description = formData.get("description");
 
     const { data, error } = await supabase
       .from("climb_routes")
       .insert({
         name,
+        description,
         slug: slugify(name?.toString()),
         sector_id: sector?.id,
+
       })
       .select()
       .single();
