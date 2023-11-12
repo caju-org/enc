@@ -19,7 +19,7 @@ const RoutesPage = () => {
     const fetchData = async () => {
       const routesResponse = await supabase.from("climb_routes").select(`
           id,name,slug,description,modality,length,created_at,updated_at,
-          sectors(name, city_id, state_id)
+          sectors(name, city_id, state_id), image
         `);
 
       setRoutes(routesResponse.data || []);
@@ -58,21 +58,28 @@ const RoutesPage = () => {
           </Button>
         </Stack>
 
-        {(routes || []).map((route) => (
-          <React.Fragment key={route.id}>
-            <ClimbRoutesCard
-              name={route.name}
-              slug={route.slug}
-              sector={route.sectors}
-              description={route.description}
-              modality={route.modality}
-              length={route.length}
-              updated_at={new Date(route.updated_at).toLocaleString()}
-              stars={route.stars}
-              image="https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=400"
-            ></ClimbRoutesCard>
-          </React.Fragment>
-        ))}
+        {(routes || []).map((route) => {
+          const imageUrlTeste = supabase.storage.from('bucket').getPublicUrl(route.image);
+          console.log(imageUrlTeste);
+
+          const imageUrl = route.image ? supabase.storage.from('bucket').getPublicUrl(route.image).data.publicUrl : "https://images.unsplash.com/photo-1568605114967-8130f3a36994?auto=format&fit=crop&w=400";
+          return (
+            <React.Fragment key={route.id}>
+              <ClimbRoutesCard
+                name={route.name}
+                slug={route.slug}
+                sector={route.sectors}
+                description={route.description}
+                modality={route.modality}
+                length={route.length}
+                updated_at={new Date(route.updated_at).toLocaleString()}
+                stars={route.stars}
+                image={imageUrl}
+              ></ClimbRoutesCard>
+            </React.Fragment>
+          );
+        }
+        )}
       </Box>
     </>
   );
