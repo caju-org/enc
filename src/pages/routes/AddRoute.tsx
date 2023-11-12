@@ -17,6 +17,7 @@ import Typography from "@mui/joy/Typography";
 import Tabs from "@mui/joy/Tabs";
 import TabList from "@mui/joy/TabList";
 import Tab, { tabClasses } from "@mui/joy/Tab";
+import InputFileUpload from "../../components/Buttons/Upload";
 
 import Modal from "@mui/joy/Modal";
 import ModalClose from "@mui/joy/ModalClose";
@@ -42,6 +43,7 @@ type Conqueror = {
 
 export default function AddRoute() {
   // const auth = useAuth();
+  const [fileUUID, setFileUUID] = useState(null);
   const { session, profile } = useAuth();
   const [allSectors, setAllSectors] = useState<Sector[] | null>([]);
   const [allConquerors, setAllConquerors] = useState<Conqueror[] | null>([]);
@@ -93,7 +95,7 @@ export default function AddRoute() {
     const formData = new FormData(event.currentTarget);
     const name = formData.get("name");
     const description = formData.get("description");
-
+    debugger;
     const { data, error } = await supabase
       .from("climb_routes")
       .insert({
@@ -101,6 +103,7 @@ export default function AddRoute() {
         description,
         slug: slugify(name?.toString()),
         sector_id: sector?.id,
+        image: fileUUID,
 
       })
       .select()
@@ -341,6 +344,7 @@ export default function AddRoute() {
                   gap: 1,
                 }}
               >
+                <InputFileUpload onUpload={setFileUUID} />
                 <Button
                   variant="outlined"
                   color="neutral"
