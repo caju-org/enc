@@ -17,7 +17,7 @@ with check (true);
 create policy "Enable read access for all users"
 on "public"."routes_conquerors"
 as permissive
-for insert
+for select 
 to authenticated
 using (true);
 
